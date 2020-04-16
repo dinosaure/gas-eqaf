@@ -46,7 +46,16 @@ Currently, the project is small and only test `Eqaf.equal` (the first implemente
 $ opam pin add eqaf-gas https://github.com/dinosaure/gas-eqaf.git
 $ opam install eqaf-gas
 $ gas
+[x] /tmp/eqaf-97a390/eqaf.cmi compiled.
+[x] /tmp/eqaf-97a390/eqaf.cmx compiled.
+[x] /tmp/eqaf-97a390/eqaf.s generated.
+[x] eqaf.s generated.
+camlEqaf__equal_155: ....
+camlEqaf__equal_155: PASS
+
 ```
+
+However, `gas` handles only x86 assembler (depending on your computer, so).
 
 # Conclusion
 
