@@ -57,6 +57,17 @@ camlEqaf__equal_155: PASS
 
 However, `gas` handles only x86 assembler (depending on your computer, so).
 
+You can see how many ticks we need to execute the function from given inputs with:
+
+```sh
+$ gas run "toto" "tata"
+results: false.
+ticks: 70.
+$ gas run "toto" "toto"
+results: true.
+ticks: 70.
+```
+
 # Conclusion
 
 At least, the project is interesting but it still is experimental and does not respect any release cycle or
