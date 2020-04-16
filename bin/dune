@@ -5,4 +5,4 @@
  (name gas)
  (public_name gas)
  (modules gas fuzz run expr prgm heap instr size address lexer parser asm register registers)
- (libraries crowbar bos bigstringaf menhirLib))
+ (libraries cmdliner crowbar bos bigstringaf menhirLib))

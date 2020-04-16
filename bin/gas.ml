@@ -1,3 +1,5 @@
+let () = Printexc.record_backtrace true
+
 open Rresult
 
 let ( <.> ) f g = fun x -> f (g x)
@@ -80,7 +82,40 @@ let prelude output =
   Fmt.pr "[%a] %a generated.\n%!" Fmt.(styled `Green string) "x" Fpath.pp output ;
   Ok prgm
 
-let () =
-  let fiber =
-    prelude (Fpath.v "eqaf.s") >>= Fuzz.fuzz_camlEqaf__equal_155 in
-  R.failwith_error_msg fiber
+open Cmdliner
+
+let run_exec v0 v1 =
+  prelude (Fpath.v "eqaf.s") >>= fun prgm -> Run.camlEqaf__equal_155 prgm v0 v1 >>= fun (res, ticks) ->
+  Fmt.pr "results: %b.\n%!" res ;
+  Fmt.pr "ticks: %d.\n%!" ticks ;
+  Ok ()
+
+let fuzz_exec () =
+  Fmt.epr ">>> START TO FUZZ.\n%!" ;
+  prelude (Fpath.v "eqaf.s") >>= Fuzz.fuzz_camlEqaf__equal_155 >>= fun () ->
+  Fmt.epr ">>> END OF FUZZ.\n%!" ; Ok ()
+
+let v0 = Arg.(required & pos 0 (some string) None & info [])
+let v1 = Arg.(required & pos 1 (some string) None & info [])
+
+let run_cmd =
+  let doc = "Run a function into the VM." in
+  let exits = Term.default_exits in
+  let man =
+    [ `S Manpage.s_description
+    ; `P "It runs an $(b,eqaf) function into the VM and show results." ] in
+  Term.(const run_exec $ v0 $ v1),
+  Term.info "run" ~doc ~exits ~man
+
+let main = fuzz_exec
+
+let cmd =
+  let doc = "GAS utility." in
+  let exits = Term.default_exits in
+  let man =
+    [ `S Manpage.s_description
+    ; `P "GAS & eqaf tool." ] in
+  Term.(const main $ const ()),
+  Term.info "gas" ~doc ~exits ~man
+
+let () = Term.(exit @@ eval_choice cmd [ run_cmd ])

@@ -1,3 +1,8 @@
+let f x =
+  let x = Float.of_int x in
+  let r = 39. +. (4. *. (Float.pow (-1.) x)) +. (7. *. x) in
+  Float.to_int r
+
 let fuzz_camlEqaf__equal_155 prgm =
   Crowbar.add_test ~name:"camlEqaf__equal_155" Crowbar.[ bytes; bytes; ] @@ fun v0 v1 ->
   let expect_res = String.equal v0 v1 in
